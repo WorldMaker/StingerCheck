@@ -1,25 +1,37 @@
 ﻿requirejs.config({
+    baseUrl: '/App/',
     paths: {
         'text': '../Scripts/text',
         'durandal': '../Scripts/durandal',
         'plugins': '../Scripts/durandal/plugins',
-        'transitions': '../Scripts/durandal/transitions'
+        'transitions': '../Scripts/durandal/transitions',
+        'bootstrap': '../Scripts/bootstrap',
+        'jquery': '../Scripts/jquery-2.1.0',
+        'knockout': '../Scripts/knockout-3.1.0',
+        'nprogress': '../Scripts/nprogress'
+    },
+    shim: {
+        'bootstrap': ['jquery'],
+        'jquery': {
+            exports: '$'
+        },
+        'nprogress': {
+            deps: ['jquery'],
+            exports: 'NProgress'
+        }
     }
 });
 
-define('jquery', function() { return jQuery; });
-define('knockout', ko);
-
-define(['durandal/system', 'durandal/app', 'durandal/viewLocator'],  function (system, app, viewLocator) {
+define(['durandal/system', 'durandal/app', 'durandal/viewLocator', 'bootstrap'],  function (system, app, viewLocator) {
     //>>excludeStart("build", true);
     system.debug(true);
     //>>excludeEnd("build");
 
-    app.title = 'Durandal Starter Kit';
+    app.title = 'Stinger Check';
 
     app.configurePlugins({
         router: true,
-        dialog: true,
+        //dialog: true,
         widget: true
     });
 
