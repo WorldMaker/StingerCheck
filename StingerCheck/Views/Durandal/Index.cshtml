@@ -18,6 +18,10 @@
             @Html.Partial("_splash")
         </div>
 
+        <script type="text/javascript">
+            var loadUser = @if (User != null && User.Identity != null) { <text>"@User.Identity.Name"</text> }
+                           else { <text>null</text> };
+        </script>
         <script src="https://login.persona.org/include.js"></script>
         <script type="text/javascript" src="~/Scripts/require.js" data-main="/App/main"></script>
     </body>

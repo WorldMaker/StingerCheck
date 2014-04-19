@@ -24,9 +24,9 @@
                         Sign Up / Sign In
                     </button>
                     <!-- ko if: user -->
-                    <p class="navbar-text"><em>Hello</em> <span data-bind="text: user().email">…</span></p>
+                    <p class="navbar-text"><em class="text-muted">Hello</em> <span data-bind="text: user().email">…</span></p>
                     <!-- /ko -->
-                    <button class="persona-logout btn btn-default" data-bind="visible: user">Sign Out</button>
+                    <button class="persona-logout btn btn-default" data-bind="visible: user"><span class="text-muted">Sign Out</span></button>
                 </div>
             </div>
         </div>

@@ -4,6 +4,8 @@ import toastr = require('toastr');
 import util = require('../util');
 import $ = require('jquery');
 
+declare var loadUser: string;
+
 export interface User {
     email: string;
 }
@@ -14,7 +16,7 @@ export function activate() {
     util.subscribeProgress(router.isNavigating);
 
     navigator.id.watch({
-        loggedInUser: null, // TODO: Persistent cookie?
+        loggedInUser: loadUser,
         onlogin: assertion => {
             $.post('/api/Persona/login', { assertion: assertion }).then(result => result, util.failAsJson).fail(err => {
                 toastr.error(err.reason, "Login Failure");

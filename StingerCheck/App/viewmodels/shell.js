@@ -7,7 +7,7 @@
         util.subscribeProgress(exports.router.isNavigating);
 
         navigator.id.watch({
-            loggedInUser: null,
+            loggedInUser: loadUser,
             onlogin: function (assertion) {
                 $.post('/api/Persona/login', { assertion: assertion }).then(function (result) {
                     return result;
