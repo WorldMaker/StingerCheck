@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -11,48 +12,52 @@ using System.Web.Http;
 
 namespace StingerCheck.Controllers
 {
+    [RoutePrefix("api/Persona")]
     public class PersonaController : ApiController
     {
         // From: http://brockallen.com/2013/10/24/a-primer-on-owin-cookie-authentication-middleware-for-the-asp-net-developer/
         public const string PersonaAuthenticationType = DefaultAuthenticationTypes.ApplicationCookie;
 
         [HttpPost]
-        public async Task<IHttpActionResult> Login([FromBody]string assertion)
+        [Route("login")]
+        public async Task<IHttpActionResult> Login([FromBody]JObject assertion)
         {
             var http = new HttpClient() { BaseAddress = new Uri(Properties.Settings.Default.PersonaVerificationBaseUrl), };
-            var result = await http.PostAsJsonAsync("verify", new { assertion, audience = Properties.Settings.Default.PersonaAudienceUrl, });
-
-            if (!result.IsSuccessStatusCode)
+            var body = await JsonConvert.SerializeObjectAsync(new
             {
-                return Unauthorized();
-            }
+                assertion = (string)assertion["assertion"],
+                audience = Properties.Settings.Default.PersonaAudienceUrl,
+            });
+            var result = await http.PostAsync("verify", new StringContent(body, System.Text.Encoding.UTF8, "application/json"));    
 
             dynamic response = JObject.Parse(await result.Content.ReadAsStringAsync());
 
-            if (string.Equals(response.status, "okay", StringComparison.OrdinalIgnoreCase))
+            var status = (string)response.status;
+            if (result.IsSuccessStatusCode && string.Equals(status, "okay", StringComparison.OrdinalIgnoreCase))
             {
                 var claims = new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, response.email),
-                    new Claim(ClaimTypes.Email, response.email),
-                    new Claim("persona-expires", response.expires),
-                    new Claim("persona-audience", response.audience),
-                    new Claim("persona-issuer", response.issuer),
+                    new Claim(ClaimTypes.Name, (string)response.email),
+                    new Claim(ClaimTypes.Email, (string)response.email),
+                    new Claim("persona-expires", (string)response.expires),
+                    new Claim("persona-audience", (string)response.audience),
+                    new Claim("persona-issuer", (string)response.issuer),
                     new Claim(ClaimTypes.AuthenticationMethod, "Persona"),
                 };
                 var identity = new ClaimsIdentity(claims, PersonaAuthenticationType);
                 var ctx = Request.GetOwinContext();
                 ctx.Authentication.SignIn(identity);
             }
-            else if (string.Equals(response.status, "failure", StringComparison.OrdinalIgnoreCase))
+            else
             {
-                return BadRequest((string)response.reason);
+                result.StatusCode = HttpStatusCode.BadRequest;
             }
 
-            return BadRequest();
+            return ResponseMessage(result);
         }
 
         [HttpPost]
+        [Route("logout")]
         public IHttpActionResult Logout()
         {
             var ctx = Request.GetOwinContext();

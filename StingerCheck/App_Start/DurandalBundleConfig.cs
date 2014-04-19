@@ -10,6 +10,7 @@ namespace StingerCheck {
           .Include("~/Content/font-awesome.css")
           .Include("~/Content/starterkit.css")
           .Include("~/Content/nprogress.css")
+          .Include("~/Content/toastr.css")
         );
     }
   }

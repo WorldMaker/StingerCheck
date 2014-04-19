@@ -8,7 +8,8 @@
         'bootstrap': '../Scripts/bootstrap',
         'jquery': '../Scripts/jquery-2.1.0',
         'knockout': '../Scripts/knockout-3.1.0',
-        'nprogress': '../Scripts/nprogress'
+        'nprogress': '../Scripts/nprogress',
+        'toastr': '../Scripts/toastr'
     },
     shim: {
         'bootstrap': ['jquery'],

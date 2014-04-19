@@ -18,6 +18,16 @@
                         <a data-bind="attr: { href: hash }, html: title"></a>
                     </li>
                 </ul>
+                <div class="navbar-right">
+                    <button class="persona-login btn btn-default" data-bind="visible: !user()">
+                        <img src="/Content/images/persona-logo-glyph.png"/>
+                        Sign Up / Sign In
+                    </button>
+                    <!-- ko if: user -->
+                    <p class="navbar-text"><em>Hello</em> <span data-bind="text: user().email">…</span></p>
+                    <!-- /ko -->
+                    <button class="persona-logout btn btn-default" data-bind="visible: user">Sign Out</button>
+                </div>
             </div>
         </div>
     </nav>

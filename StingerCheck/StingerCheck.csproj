@@ -228,10 +228,17 @@
   <ItemGroup>
     <Content Include="App\main.js" />
     <Content Include="App\viewmodels\flickr.js" />
+    <Content Include="Content\toastr.css" />
+    <Content Include="Content\toastr.less" />
     <None Include="Scripts\jquery-2.1.0.intellisense.js" />
+    <Content Include="Content\images\persona-logo-glyph.png" />
+    <Content Include="Content\toastr.min.css" />
     <Content Include="Scripts\jquery-2.1.0.js" />
     <Content Include="Scripts\jquery-2.1.0.min.js" />
     <Content Include="Scripts\jquery-2.1.0.min.map" />
+    <Content Include="Scripts\toastr.js" />
+    <Content Include="Scripts\toastr.min.js" />
+    <Content Include="Scripts\toastr.min.js.map" />
     <TypeScriptCompile Include="App\util.ts" />
     <TypeScriptCompile Include="App\viewmodels\shell.ts" />
     <Content Include="App\viewmodels\welcome.js" />
@@ -347,6 +354,8 @@
     </Content>
     <Content Include="Views\Durandal\Index.cshtml" />
     <Content Include="Views\Durandal\_splash.cshtml" />
+    <TypeScriptCompile Include="Scripts\typings\persona\persona.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\toastr\toastr.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
