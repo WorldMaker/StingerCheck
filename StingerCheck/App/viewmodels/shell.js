@@ -13,7 +13,7 @@
                     return result;
                 }, util.failAsJson).fail(function (err) {
                     toastr.error(err.reason, "Login Failure");
-                    navigator.id.logout(); // avoid loops
+                    navigator.id.logout();
                 }).then(function (result) {
                     return exports.user(result);
                 });
@@ -38,7 +38,6 @@
     exports.activate = activate;
 
     function compositionComplete() {
-        // Can't use KO bindings for these because apparently magic happens in them
         $('.persona-login').click(function () {
             navigator.id.request();
         });

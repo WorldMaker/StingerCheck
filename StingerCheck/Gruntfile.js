@@ -7,7 +7,7 @@
                 options: {
                     module: 'amd', //or commonjs
                     target: 'es5', //or es3
-                    sourcemap: true,
+                    sourceMap: true,
                 }
             }
         },
@@ -20,10 +20,8 @@
                     "scripts/durandal/**/*.*",
                     "scripts/jquery-2.1.0.js",
                     "scripts/knockout-3.1.0.js",
-                    "scripts/knockout.validation.js",
                     "scripts/nprogress.js",
                     "scripts/toastr.js",
-                    "scripts/underscore-ko.js"
                 ],
                 options: {
                     baseUrl: "app/",
@@ -33,10 +31,8 @@
                         'bootstrap': '../Scripts/bootstrap',
                         'jquery': '../Scripts/jquery-2.1.0',
                         'knockout': '../Scripts/knockout-3.1.0',
-                        'knockout.validation': '../Scripts/knockout.validation',
                         'nprogress': '../Scripts/nprogress',
                         'toastr': '../Scripts/toastr',
-                        'underscore-ko': '../Scripts/underscore-ko'
                     },
                     shim: {
                         'bootstrap': ['jquery'],
@@ -54,7 +50,8 @@
                             global_defs: {
                                 DEBUG: false
                             }
-                        }
+                        },
+                        sourceMap: true
                     }
                 }
             }
