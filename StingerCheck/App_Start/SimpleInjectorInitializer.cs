@@ -9,6 +9,7 @@ namespace StingerCheck.App_Start
     using SimpleInjector.Extensions;
     using SimpleInjector.Integration.Web;
     using SimpleInjector.Integration.Web.Mvc;
+    using SimpleInjector.Integration.WebApi;
 
     using StingerCheck.Models;
     using StackExchange.Redis;
@@ -25,10 +26,12 @@ namespace StingerCheck.App_Start
             InitializeContainer(container);
 
             container.RegisterMvcControllers(Assembly.GetExecutingAssembly());
+            container.RegisterWebApiControllers(System.Web.Http.GlobalConfiguration.Configuration);
             
             container.Verify();
             
             DependencyResolver.SetResolver(new SimpleInjectorDependencyResolver(container));
+            System.Web.Http.GlobalConfiguration.Configuration.DependencyResolver = new SimpleInjectorWebApiDependencyResolver(container);
         }
      
         private static void InitializeContainer(Container container)
