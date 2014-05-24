@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
@@ -10,6 +11,7 @@ namespace StingerCheck.Models
     {
         public long Id { get; set; }
         [Index(IsUnique = true)]
+        [MaxLength(50)]
         public string TomatoId { get; set; }
         public string Title { get; set; }
         public string TomatoUrl { get; set; }

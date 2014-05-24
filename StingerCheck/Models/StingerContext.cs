@@ -12,7 +12,7 @@ namespace StingerCheck.Models
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Stinger> Stingers { get; set; }
 
-        public StingerContext() : base()
+        public StingerContext() : base("DefaultConnection")
         {
             this.Configuration.LazyLoadingEnabled = false; // Turn off lazy loading by default
         }
