@@ -62,6 +62,28 @@ namespace StingerCheck.Services
             return jmovies;
         }
 
+        public async Task<Movie> GetCachedMovie(string tomatoId)
+        {
+            var jmovies = await GetCachedNowPlaying();
+            if (!jmovies.Any())
+            {
+                return null;
+            }
+
+            var movie = jmovies.SelectMany(jm => jm.SelectToken("movies")).Where(jm => string.Equals((string)jm["id"], tomatoId)).FirstOrDefault();
+            if (movie == null)
+            {
+                return null;
+            }
+
+            return new Movie
+            {
+                Title = (string)movie["title"],
+                TomatoId = tomatoId,
+                TomatoUrl = (string)movie.SelectToken("links.alternate"),
+            };
+        }
+
         public async Task<IEnumerable<Movie>> GetNowPlaying()
         {
             var jmovies = await GetCachedNowPlaying();

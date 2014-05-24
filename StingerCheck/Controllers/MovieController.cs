@@ -34,6 +34,12 @@ namespace StingerCheck.Controllers
         public async Task<IHttpActionResult> GetByTomatoId(string id)
         {
             var movie = await db.Movies.FirstOrDefaultAsync(m => m.TomatoId == id);
+
+            if (movie == null)
+            {
+                movie = await tomato.GetCachedMovie(id);
+            }
+
             if (movie == null)
             {
                 return NotFound();

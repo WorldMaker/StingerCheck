@@ -1,8 +1,108 @@
-﻿<div class="messageBox autoclose" style="max-width: 425px">
-    <div class="modal-header">
-        <h3>Details</h3>
-    </div>
-    <div class="modal-body">
-        <p data-bind="html: description"></p>
-    </div>
-</div>
+﻿<section>
+    <!-- ko with: movie -->
+    <h2 data-bind="text: title">…</h2>
+    <p><a data-bind="attr: { href: tomatoUrl }">RottenTomatoes reviews for <span data-bind="text: title">…</span></a></p>
+    <!-- ko if: hasFinalStinger() || hasMidStinger() -->
+    <p>
+        Reported to have a <span data-bind="visible: hasMidStinger, text: 'mid-credits ' + midType()">…</span>
+        <span data-bind="visible: hasMidStinger() && hasFinalStinger()">and a</span>
+        <span data-bind="visible: hasFinalStinger, text: 'final ' + finalType()">…</span>
+    </p>
+    <!-- /ko -->
+    <!-- /ko -->
+
+    <form class="form-horizontal">
+        <!-- ko if: !user() -->
+        <div class="alert alert-info">Please login to vote.</div>
+        <!-- /ko -->
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" data-bind="value: hasMidStinger"/> Has a Mid-Credits Stinger
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <label for="midTeaser" title="Teaser: hints at possible future storylines">Teaser</label>
+            </div>
+            <div class="col-sm-10">
+                <input type="range" class="form-control" id="midTeaser" min="0" max="4" data-bind="value: midTeaser"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <label for="midClosure" title="Closure: ties up a lose end">Closure</label>
+            </div>
+            <div class="col-sm-10">
+                <input type="range" class="form-control" id="midClosure" min="0" max="4" data-bind="value: midClosure" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <label for="midEgg" title="Easter Egg: surprise or fan reference">Egg</label>
+            </div>
+            <div class="col-sm-10">
+                <input type="range" class="form-control" id="midEgg" min="0" max="4" data-bind="value: midEgg" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <label for="midGag" title="Gag: joke, gag reel, humorous occurence">Gag</label>
+            </div>
+            <div class="col-sm-10">
+                <input type="range" class="form-control" id="midGag" min="0" max="4" data-bind="value: midGag" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" data-bind="value: hasFinalStinger" /> Has a Final Stinger
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <label for="finalTeaser" title="Teaser: hints at possible future storylines">Teaser</label>
+            </div>
+            <div class="col-sm-10">
+                <input type="range" class="form-control" id="finalTeaser" min="0" max="4" data-bind="value: finalTeaser" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <label for="finalClosure" title="Closure: ties up a lose end">Closure</label>
+            </div>
+            <div class="col-sm-10">
+                <input type="range" class="form-control" id="finalClosure" min="0" max="4" data-bind="value: finalClosure" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <label for="finalEgg" title="Easter Egg: surprise or fan reference">Egg</label>
+            </div>
+            <div class="col-sm-10">
+                <input type="range" class="form-control" id="finalEgg" min="0" max="4" data-bind="value: finalEgg" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <label for="finalGag" title="Gag: joke, gag reel, humorous occurence">Gag</label>
+            </div>
+            <div class="col-sm-10">
+                <input type="range" class="form-control" id="finalGag" min="0" max="4" data-bind="value: finalGag" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-success" data-bind="click: vote, enable: user">Vote</button>
+            </div>
+        </div>
+    </form>
+</section>

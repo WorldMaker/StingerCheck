@@ -31,7 +31,8 @@ export function activate() {
     });
 
     router.map([
-        { route: '', title:'Welcome', moduleId: 'viewmodels/welcome', nav: true },
+        { route: '', title: 'Now Playing', moduleId: 'viewmodels/welcome', nav: true },
+        { route: 'detail/:tomatoId', title: 'Movie Details', moduleId: 'viewmodels/detail', nav: false },
     ]).buildNavigationModel();
             
     return router.activate();

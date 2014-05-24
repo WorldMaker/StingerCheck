@@ -282,7 +282,9 @@
     <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\toastr.min.js.map" />
     <TypeScriptCompile Include="App\models\movie.ts" />
+    <TypeScriptCompile Include="App\models\security.ts" />
     <TypeScriptCompile Include="App\util.ts" />
+    <TypeScriptCompile Include="App\viewmodels\detail.ts" />
     <TypeScriptCompile Include="App\viewmodels\shell.ts" />
     <TypeScriptCompile Include="App\viewmodels\welcome.ts" />
     <Content Include="App\views\detail.html" />

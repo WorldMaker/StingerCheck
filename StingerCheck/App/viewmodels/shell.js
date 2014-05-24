@@ -13,7 +13,7 @@
                     return result;
                 }, util.failAsJson).fail(function (err) {
                     toastr.error(err.reason, "Login Failure");
-                    navigator.id.logout();
+                    navigator.id.logout(); // avoid loops
                 }).then(function (result) {
                     return exports.user(result);
                 });
@@ -30,7 +30,8 @@
         });
 
         exports.router.map([
-            { route: '', title: 'Welcome', moduleId: 'viewmodels/welcome', nav: true }
+            { route: '', title: 'Now Playing', moduleId: 'viewmodels/welcome', nav: true },
+            { route: 'detail/:tomatoId', title: 'Movie Details', moduleId: 'viewmodels/detail', nav: false }
         ]).buildNavigationModel();
 
         return exports.router.activate();
@@ -38,6 +39,7 @@
     exports.activate = activate;
 
     function compositionComplete() {
+        // Can't use KO bindings for these because apparently magic happens in them
         $('.persona-login').click(function () {
             navigator.id.request();
         });
