@@ -22,6 +22,7 @@ namespace StingerCheck.Services
         public TomatoClient(ConnectionMultiplexer connection, StingerContext context)
         {
             this.connection = connection;
+            this.context = context;
         }
 
         public async Task<IEnumerable<JObject>> GetCachedNowPlaying()
@@ -69,7 +70,7 @@ namespace StingerCheck.Services
                 jmovies = await GetFreshNowPlaying();
             }
 
-            var movies = jmovies.SelectMany(jm => jm.SelectToken("movies")).SelectMany(x => x);
+            var movies = jmovies.SelectMany(jm => jm.SelectToken("movies"));
             var tomatoids = movies.Select(m => (string)m["id"]);
             var existing = context.Movies.Where(m => tomatoids.Contains(m.TomatoId)).ToDictionary(m => m.TomatoId);
             return from movie in movies
