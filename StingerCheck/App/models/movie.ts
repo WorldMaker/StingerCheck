@@ -38,7 +38,7 @@ export class MovieVm {
         else if (this.midEgg() == 3) return "egg";
         else if (this.midGag() == 3) return "gag";
         else if (this.midTeaser() == 3) return "teaser";
-        else return "undecided"; // TODO: Ties?
+        else return "stinger"; // TODO: Ties?
     });
 
     finalType = ko.computed(() => {
@@ -46,7 +46,7 @@ export class MovieVm {
         else if (this.finalEgg() == 3) return "egg";
         else if (this.finalGag() == 3) return "gag";
         else if (this.finalTeaser() == 3) return "teaser";
-        else return "undecided"; // TODO: Ties?
+        else return "stinger"; // TODO: Ties?
     });
 
     constructor(movie: Movie) {

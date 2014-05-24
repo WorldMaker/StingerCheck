@@ -5,9 +5,9 @@
             <h4 data-bind="text: title">…</h4>
             <!-- ko if: hasFinalStinger() || hasMidStinger() -->
             <p>
-                Reported to have a <span data-bind="visible: hasMidStinger, text: midType() + ' mid-credits stinger'">…</span>
+                Reported to have a <span data-bind="visible: hasMidStinger, text: 'mid-credits ' + midType()">…</span>
                 <span data-bind="visible: hasMidStinger() && hasFinalStinger()">and a</span>
-                <span data-bind="visible: hasFinalStinger, text: finalType() + ' final stinger'">…</span>
+                <span data-bind="visible: hasFinalStinger, text: 'final ' + finalType()">…</span>
             </p>
             <!-- /ko -->
         </a>
