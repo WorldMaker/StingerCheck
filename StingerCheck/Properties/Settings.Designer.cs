@@ -22,23 +22,5 @@ namespace StingerCheck.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://verifier.login.persona.org")]
-        public string PersonaVerificationBaseUrl {
-            get {
-                return ((string)(this["PersonaVerificationBaseUrl"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://stingercheck.azurewebsites.net")]
-        public string PersonaAudienceUrl {
-            get {
-                return ((string)(this["PersonaAudienceUrl"]));
-            }
-        }
     }
 }

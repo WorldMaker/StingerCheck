@@ -12,7 +12,12 @@ namespace StingerCheck.Controllers
 {
     public class StingerController : ApiController
     {
-        public StingerContext db = new StingerContext();
+        public StingerContext db;
+
+        public StingerController(StingerContext db)
+        {
+            this.db = db;
+        }
 
         [Authorize]
         public async Task<IHttpActionResult> PostVote(Stinger stinger)

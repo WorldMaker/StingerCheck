@@ -1,4 +1,5 @@
 ﻿using StingerCheck.Models;
+using StingerCheck.Services;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -13,18 +14,24 @@ namespace StingerCheck.Controllers
 {
     public class MovieController : ApiController
     {
-        public StingerContext db = new StingerContext();
+        StingerContext db;
+        TomatoClient tomato;
+
+        public MovieController(StingerContext db, TomatoClient tomato)
+        {
+            this.db = db;
+            this.tomato = tomato;
+        }
 
         [ResponseType(typeof(Movie[]))]
         public async Task<IHttpActionResult> GetNowPlaying()
         {
-            var movies = await db.Movies.Take(10) // TODO: Tomato API lookup
-                .ToArrayAsync();
+            var movies = await tomato.GetNowPlaying();
             return Ok(movies);
         }
 
         [ResponseType(typeof(Movie))]
-        public async Task<IHttpActionResult> GetByTomatoId(long id)
+        public async Task<IHttpActionResult> GetByTomatoId(string id)
         {
             var movie = await db.Movies.FirstOrDefaultAsync(m => m.TomatoId == id);
             if (movie == null)

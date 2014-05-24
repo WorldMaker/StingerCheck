@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -22,11 +23,11 @@ namespace StingerCheck.Controllers
         [Route("login")]
         public async Task<IHttpActionResult> Login([FromBody]JObject assertion)
         {
-            var http = new HttpClient() { BaseAddress = new Uri(Properties.Settings.Default.PersonaVerificationBaseUrl), };
+            var http = new HttpClient() { BaseAddress = new Uri(ConfigurationManager.AppSettings["PersonaVerificationBaseUrl"]), };
             var body = await JsonConvert.SerializeObjectAsync(new
             {
                 assertion = (string)assertion["assertion"],
-                audience = Properties.Settings.Default.PersonaAudienceUrl,
+                audience = ConfigurationManager.AppSettings["PersonaAudienceUrl"],
             });
             var result = await http.PostAsync("verify", new StringContent(body, System.Text.Encoding.UTF8, "application/json"));    
 

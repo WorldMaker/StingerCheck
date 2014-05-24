@@ -1,26 +1,23 @@
-﻿define(function() {
-    var ctor = function () {
-        this.displayName = 'Welcome to the Durandal Starter Kit!';
-        this.description = 'Durandal is a cross-device, cross-platform client framework written in JavaScript and designed to make Single Page Applications (SPAs) easy to create and maintain.';
-        this.features = [
-            'Clean MV* Architecture',
-            'JS & HTML Modularity',
-            'Simple App Lifecycle',
-            'Eventing, Modals, Message Boxes, etc.',
-            'Navigation & Screen State Management',
-            'Consistent Async Programming w/ Promises',
-            'App Bundling and Optimization',
-            'Use any Backend Technology',
-            'Built on top of jQuery, Knockout & RequireJS',
-            'Integrates with other libraries such as SammyJS & Bootstrap',
-            'Make jQuery & Bootstrap widgets templatable and bindable (or build your own widgets).'
-        ];
-    };
+﻿define(["require", "exports", 'knockout', '../models/movie', '../util', 'jquery'], function(require, exports, ko, movie, util, $) {
+    var WelcomeVm = (function () {
+        function WelcomeVm() {
+            this.movies = ko.observableArray();
+        }
+        WelcomeVm.prototype.activate = function () {
+            var _this = this;
+            this.movies.removeAll();
+            return $.get('/api/Movies').then(function (result) {
+                return result;
+            }, util.failAsJson).then(function (movies) {
+                return ko.utils.arrayForEach(movies, function (m) {
+                    return _this.movies.push(new movie.MovieVm(m));
+                });
+            });
+        };
+        return WelcomeVm;
+    })();
 
-    //Note: This module exports a function. That means that you, the developer, can create multiple instances.
-    //This pattern is also recognized by Durandal so that it can create instances on demand.
-    //If you wish to create a singleton, you should export an object instead of a function.
-    //See the "flickr" module for an example of object export.
-
-    return ctor;
+    
+    return WelcomeVm;
 });
+//# sourceMappingURL=welcome.js.map
