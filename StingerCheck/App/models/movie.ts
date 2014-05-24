@@ -1,20 +1,20 @@
 ﻿import ko = require('knockout');
 
 export interface Movie {
-    Id: number;
-    TomatoId: string;
-    Title: string;
-    TomatoUrl: string;
-    HasMidStinger?: boolean;
-    HasFinalStinger?: boolean;
-    MidTeaser?: number;
-    MidClosure?: number;
-    MidGag?: number;
-    MidEgg?: number;
-    FinalTeaser?: number;
-    FinalClosure?: number;
-    FinalGag?: number;
-    FinalEgg?: number;
+    id: number;
+    tomatoId: string;
+    title: string;
+    tomatoUrl: string;
+    hasMidStinger?: boolean;
+    hasFinalStinger?: boolean;
+    midTeaser?: number;
+    midClosure?: number;
+    midGag?: number;
+    midEgg?: number;
+    finalTeaser?: number;
+    finalClosure?: number;
+    finalGag?: number;
+    finalEgg?: number;
 }
 
 export class MovieVm {
@@ -54,19 +54,19 @@ export class MovieVm {
     }
 
     update(movie: Movie) {
-        this.id(movie.Id);
-        this.title(movie.Title);
-        this.tomatoId(movie.TomatoId);
-        this.tomatoUrl(movie.TomatoUrl);
-        this.hasFinalStinger(movie.HasFinalStinger || false);
-        this.hasMidStinger(movie.HasMidStinger || false);
-        this.midClosure(movie.MidClosure || 0);
-        this.midEgg(movie.MidEgg || 0);
-        this.midGag(movie.MidGag || 0);
-        this.midTeaser(movie.MidTeaser || 0);
-        this.finalClosure(movie.FinalClosure || 0);
-        this.finalEgg(movie.FinalEgg || 0);
-        this.finalGag(movie.FinalGag || 0);
-        this.finalTeaser(movie.FinalTeaser || 0);
+        this.id(movie.id);
+        this.title(movie.title);
+        this.tomatoId(movie.tomatoId);
+        this.tomatoUrl(movie.tomatoUrl);
+        this.hasFinalStinger(movie.hasFinalStinger || false);
+        this.hasMidStinger(movie.hasMidStinger || false);
+        this.midClosure(movie.midClosure || 0);
+        this.midEgg(movie.midEgg || 0);
+        this.midGag(movie.midGag || 0);
+        this.midTeaser(movie.midTeaser || 0);
+        this.finalClosure(movie.finalClosure || 0);
+        this.finalEgg(movie.finalEgg || 0);
+        this.finalGag(movie.finalGag || 0);
+        this.finalTeaser(movie.finalTeaser || 0);
     }
 }

@@ -29,7 +29,7 @@ namespace StingerCheck.Services
         {
             var db = connection.GetDatabase();
             var items = await db.ListRangeAsync(TomatoMoviesKey);
-            return from item in items
+            return from item in items.Reverse()
                    select JObject.Parse(item);
         }
 
@@ -70,7 +70,9 @@ namespace StingerCheck.Services
                 jmovies = await GetFreshNowPlaying();
             }
 
-            var movies = jmovies.SelectMany(jm => jm.SelectToken("movies"));
+            var movies = jmovies.SelectMany(jm => jm.SelectToken("movies"))
+                .GroupBy(jm => (string)jm["id"])
+                .Select(g => g.First()); // Dupe problem?
             var tomatoids = movies.Select(m => (string)m["id"]);
             var existing = context.Movies.Where(m => tomatoids.Contains(m.TomatoId)).ToDictionary(m => m.TomatoId);
             return from movie in movies
