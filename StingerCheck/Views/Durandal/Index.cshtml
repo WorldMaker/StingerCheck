@@ -23,6 +23,13 @@
                            else { <text>null</text> };
         </script>
         <script src="https://login.persona.org/include.js"></script>
-        <script type="text/javascript" src="~/Scripts/require.js" data-main="/App/main"></script>
+        @if (Context.IsDebuggingEnabled || !File.Exists(Server.MapPath("~/App/main-built.js")))
+        {
+            <script type="text/javascript" src="~/Scripts/require.js" data-main="/App/main"></script>
+        }
+        else
+        {
+            <script type="text/javascript" src="~/App/main-built.js"></script>
+        }
     </body>
 </html>
