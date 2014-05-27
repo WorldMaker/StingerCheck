@@ -35,6 +35,7 @@
 
         exports.router.map([
             { route: '', title: 'Now Playing', moduleId: 'viewmodels/welcome', nav: true },
+            { route: 'about', title: 'About', moduleId: 'viewmodels/about', nav: true },
             { route: 'detail/:tomatoId', title: 'Movie Details', moduleId: 'viewmodels/detail', nav: false }
         ]).buildNavigationModel();
 
