@@ -161,3 +161,4 @@ StingerCheck/App/**/*.js.map
 # Redundant for VS ** globs
 StingerCheck/App/*.js
 StingerCheck/App/*.js.map
+/StingerCheck/node_modules

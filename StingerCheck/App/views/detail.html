@@ -105,4 +105,9 @@
             </div>
         </div>
     </form>
+
+    <!-- ko if: movie().id -->
+    <div class="alert alert-danger">Discussions are likely and welcome to include spoilers</div>
+    <div data-bind="disqus: { identifier: 'movie:' + movie().id(), title: movie().title }"></div>
+    <!-- /ko -->
 </section>

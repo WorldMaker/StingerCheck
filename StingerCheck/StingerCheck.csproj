@@ -266,6 +266,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App\main.js" />
+    <Content Include="App\widgets\disqus\view.html" />
     <Content Include="Content\toastr.css" />
     <Content Include="Content\toastr.less" />
     <Content Include="Gruntfile.js" />
@@ -396,6 +397,7 @@
     </Content>
     <Content Include="Views\Durandal\Index.cshtml" />
     <Content Include="Views\Durandal\_splash.cshtml" />
+    <TypeScriptCompile Include="App\widgets\disqus\viewmodel.ts" />
     <TypeScriptCompile Include="Scripts\typings\persona\persona.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\toastr\toastr.d.ts" />
   </ItemGroup>
