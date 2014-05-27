@@ -3,11 +3,11 @@
     <h2 data-bind="text: title">…</h2>
     <p><a data-bind="attr: { href: tomatoUrl }">RottenTomatoes reviews for <span data-bind="text: title">…</span></a></p>
     <!-- ko if: hasFinalStinger() || hasMidStinger() -->
-    <p>
+    <div class="alert" data-bind="css: { 'alert-success': hasFinalStinger, 'alert-info': !hasFinalStinger() && hasMidStinger() }">
         Reported to have a <span data-bind="visible: hasMidStinger, text: 'mid-credits ' + midType()">…</span>
         <span data-bind="visible: hasMidStinger() && hasFinalStinger()">and a</span>
         <span data-bind="visible: hasFinalStinger, text: 'final ' + finalType()">…</span>
-    </p>
+    </div>
     <!-- /ko -->
     <!-- /ko -->
 
@@ -19,7 +19,7 @@
             <div class="col-sm-offset-2 col-sm-10">
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" data-bind="value: hasMidStinger"/> Has a Mid-Credits Stinger
+                        <input type="checkbox" data-bind="checked: hasMidStinger"/> Has a Mid-Credits Stinger
                     </label>
                 </div>
             </div>
@@ -61,7 +61,7 @@
             <div class="col-sm-offset-2 col-sm-10">
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" data-bind="value: hasFinalStinger" /> Has a Final Stinger
+                        <input type="checkbox" data-bind="checked: hasFinalStinger" /> Has a Final Stinger
                     </label>
                 </div>
             </div>

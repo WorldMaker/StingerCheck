@@ -1,7 +1,7 @@
 ﻿<section>
     <h2>Now Playing</h2>
     <div class="list-group" data-bind="foreach: movies">
-        <a class="list-group-item" data-bind="attr: { href: '#detail/' + tomatoId() }, css: { 'list-group-item-success': hasFinalStinger, 'list-group-item-info': !hasFinalStinger() && hasMidStinger }">
+        <a class="list-group-item" data-bind="attr: { href: '#detail/' + tomatoId() }, css: { 'list-group-item-success': hasFinalStinger, 'list-group-item-info': !hasFinalStinger() && hasMidStinger() }">
             <h4 data-bind="text: title">…</h4>
             <!-- ko if: hasFinalStinger() || hasMidStinger() -->
             <p>

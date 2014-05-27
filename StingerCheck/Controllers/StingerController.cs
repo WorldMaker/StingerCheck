@@ -1,4 +1,5 @@
 ﻿using StingerCheck.Models;
+using StingerCheck.Services;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -7,33 +8,53 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace StingerCheck.Controllers
 {
     public class StingerController : ApiController
     {
-        public StingerContext db;
+        StingerContext db;
+        TomatoClient tomato;
 
-        public StingerController(StingerContext db)
+        public StingerController(StingerContext db, TomatoClient tomato)
         {
             this.db = db;
+            this.tomato = tomato;
         }
 
         [Authorize]
+        [ResponseType(typeof(Movie))]
         public async Task<IHttpActionResult> PostVote(Stinger stinger)
         { 
             if (stinger.Movie == null)
             {
                 return BadRequest();
             }
-            stinger.Movie = await db.Movies.FindAsync(stinger.Movie.Id);
+            if (stinger.Movie.Id != 0)
+            {
+                stinger.Movie = await db.Movies.FindAsync(stinger.Movie.Id);
+            }
+            else
+            {
+                var movie = await db.Movies.FirstOrDefaultAsync(m => string.Equals(m.TomatoId, stinger.Movie.TomatoId));
+                if (movie == null)
+                {
+                    movie = await tomato.GetCachedMovie(stinger.Movie.TomatoId);
+                    if (movie == null)
+                    {
+                        return BadRequest();
+                    }
+                }
+                stinger.Movie = movie;
+            }
 
             var user = await db.Users.FirstOrDefaultAsync(u => u.Email == User.Identity.Name);
             if (user == null)
             {
                 user = new User { Email = User.Identity.Name };
             }
-            else if (await db.Stingers.Where(s => s.Movie.Id == stinger.Movie.Id && s.User.Id == stinger.User.Id).AnyAsync())
+            else if (stinger.Movie.Id != 0 && await db.Stingers.Where(s => s.Movie.Id == stinger.Movie.Id && s.User.Id == stinger.User.Id).AnyAsync())
             {
                 throw new ApplicationException("Already voted."); // TODO: Allow Revoting?
             }
@@ -157,7 +178,7 @@ namespace StingerCheck.Controllers
 
             await db.SaveChangesAsync();
 
-            return Ok();
+            return Ok(stinger.Movie);
         }
 
         protected override void Dispose(bool disposing)

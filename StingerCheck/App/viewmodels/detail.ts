@@ -12,14 +12,14 @@ class StingerVm {
 
     hasMidStinger = ko.observable<boolean>();
     hasFinalStinger = ko.observable<boolean>();
-    midTeaser = ko.observable<number>();
-    midClosure = ko.observable<number>();
-    midGag = ko.observable<number>();
-    midEgg = ko.observable<number>();
-    finalTeaser = ko.observable<number>();
-    finalClosure = ko.observable<number>();
-    finalGag = ko.observable<number>();
-    finalEgg = ko.observable<number>();
+    midTeaser = ko.observable<number>(0);
+    midClosure = ko.observable<number>(0);
+    midGag = ko.observable<number>(0);
+    midEgg = ko.observable<number>(0);
+    finalTeaser = ko.observable<number>(0);
+    finalClosure = ko.observable<number>(0);
+    finalGag = ko.observable<number>(0);
+    finalEgg = ko.observable<number>(0);
 
     activate(tomatoId) {
         return $.get('/api/Movie/' + tomatoId).then<movie.Movie>(result => result, util.failAsJson)
@@ -32,6 +32,10 @@ class StingerVm {
             type: 'POST',
             headers: security.getSecurityHeaders(),
             data: {
+                movie: {
+                    id: this.movie().id(),
+                    tomatoId: this.movie().tomatoId(),
+                },
                 hasMidStinger: this.hasMidStinger(),
                 hasFinalStinger: this.hasFinalStinger(),
                 midTeaser: this.midTeaser(),
@@ -44,7 +48,11 @@ class StingerVm {
                 finalEgg: this.finalEgg(),
             },
         }).then(result => result, util.failAsJson)
-            .fail(e => toastr.error(e.message || "Error posting vote", "Stinger Vote"));
+            .fail(e => toastr.error(e.message || "Error posting vote", "Stinger Vote"))
+            .then(m => {
+                this.movie().update(m);
+                toastr.success("Vote posted", "Stinger Vote");
+            });
     }
 }
 
