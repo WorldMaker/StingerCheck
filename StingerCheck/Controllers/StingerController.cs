@@ -54,13 +54,31 @@ namespace StingerCheck.Controllers
             {
                 user = new User { Email = User.Identity.Name };
             }
-            else if (stinger.Movie.Id != 0 && await db.Stingers.Where(s => s.Movie.Id == stinger.Movie.Id && s.User.Id == stinger.User.Id).AnyAsync())
-            {
-                throw new ApplicationException("Already voted."); // TODO: Allow Revoting?
-            }
             stinger.User = user;
 
-            db.Stingers.Add(stinger);
+            if (stinger.Movie.Id != 0 && stinger.User.Id != 0)
+            {
+                var dbstinger = await db.Stingers.Where(s => s.Movie.Id == stinger.Movie.Id && s.User.Id == stinger.User.Id).FirstOrDefaultAsync();
+                if (dbstinger != null)
+                {
+                    dbstinger.HasMidStinger = stinger.HasMidStinger;
+                    dbstinger.HasFinalStinger = stinger.HasFinalStinger;
+                    dbstinger.FinalClosure = stinger.FinalClosure;
+                    dbstinger.FinalEgg = stinger.FinalEgg;
+                    dbstinger.FinalGag = stinger.FinalGag;
+                    dbstinger.FinalTeaser = stinger.FinalTeaser;
+                    dbstinger.MidClosure = stinger.MidClosure;
+                    dbstinger.MidEgg = stinger.MidEgg;
+                    dbstinger.MidGag = stinger.MidGag;
+                    dbstinger.MidTeaser = stinger.MidTeaser;
+                }
+                stinger = dbstinger;
+            }
+
+            if (stinger.Id == 0)
+            {
+                db.Stingers.Add(stinger);
+            }
             
             await db.SaveChangesAsync();
 
