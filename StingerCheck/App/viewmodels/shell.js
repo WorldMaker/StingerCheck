@@ -1,4 +1,4 @@
-﻿define(["require", "exports", 'knockout', "plugins/router", 'toastr', '../util', 'jquery'], function(require, exports, ko, router, toastr, util, $) {
+﻿define(["require", "exports", 'knockout', "plugins/router", '../models/security', 'toastr', '../util', 'jquery'], function(require, exports, ko, router, security, toastr, util, $) {
     exports.router = router;
 
     exports.user = ko.observable(null);
@@ -9,13 +9,16 @@
         navigator.id.watch({
             loggedInUser: loadUser,
             onlogin: function (assertion) {
-                $.post('/api/Persona/login', { assertion: assertion }).then(function (result) {
+                $.post('/Token', { grant_type: 'persona', assertion: assertion }).then(function (result) {
                     return result;
                 }, util.failAsJson).fail(function (err) {
-                    toastr.error(err.reason, "Login Failure");
+                    toastr.error(err.error_description || err.error || "Unknown error occurred", "Login Failure");
                     navigator.id.logout(); // avoid loops
                 }).then(function (result) {
-                    return exports.user(result);
+                    if (result.access_token) {
+                        security.setAccessToken(result.access_token, false);
+                    }
+                    exports.user(result);
                 });
             },
             onlogout: function () {
@@ -24,7 +27,8 @@
                 }, util.failAsJson).fail(function (err) {
                     toastr.error(err.message || "An unknown error occured.", "Logout Failure");
                 }).always(function () {
-                    return exports.user(null);
+                    security.clearAccessToken();
+                    exports.user(null);
                 });
             }
         });

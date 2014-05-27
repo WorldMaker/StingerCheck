@@ -1,6 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Owin.Security.OAuth;
+using System.Net.Http;
+using System.Configuration;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Security.Claims;
+using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security;
+using System.Collections.Generic;
 
 namespace StingerCheck.Providers
 {
@@ -16,6 +24,72 @@ namespace StingerCheck.Providers
             }
 
             _publicClientId = publicClientId;
+        }
+
+        public async override Task GrantCustomExtension(OAuthGrantCustomExtensionContext context)
+        {
+            if (context.GrantType.Equals("persona", StringComparison.OrdinalIgnoreCase))
+            {
+                var http = new HttpClient() { BaseAddress = new Uri(ConfigurationManager.AppSettings["PersonaVerificationBaseUrl"]), };
+                var body = await JsonConvert.SerializeObjectAsync(new
+                {
+                    assertion = (string)context.Parameters["assertion"],
+                    audience = ConfigurationManager.AppSettings["PersonaAudienceUrl"],
+                });
+                var result = await http.PostAsync("verify", new StringContent(body, System.Text.Encoding.UTF8, "application/json"));
+
+                var response = JObject.Parse(await result.Content.ReadAsStringAsync());
+
+                var status = (string)response["status"];
+                if (result.IsSuccessStatusCode && string.Equals(status, "okay", StringComparison.OrdinalIgnoreCase))
+                {
+                    var email = (string)response["email"];
+                    var claims = new Claim[]
+                    {
+                        new Claim(ClaimTypes.Name, email),
+                        new Claim(ClaimTypes.Email, email),
+                        new Claim("persona-expires", (string)response["expires"]),
+                        new Claim("persona-audience", (string)response["audience"]),
+                        new Claim("persona-issuer", (string)response["issuer"]),
+                        new Claim(ClaimTypes.AuthenticationMethod, "Persona"),
+                    };
+                    var oauthIdentity = new ClaimsIdentity(claims, context.Options.AuthenticationType);
+                    var ticket = new AuthenticationTicket(oauthIdentity, new AuthenticationProperties(new Dictionary<string, string> {
+                        {"email", email},
+                    }));
+                    context.Validated(ticket);
+                    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationType);
+                    context.OwinContext.Authentication.SignIn(identity);
+                    return;
+                }
+
+                context.SetError("invalid_grant", (string)response.SelectToken("reason"));
+                return;
+            }
+
+            await base.GrantCustomExtension(context);
+        }
+
+
+        public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
+        {
+            // Resource owner password credentials does not provide a client ID.
+            if (context.ClientId == null)
+            {
+                context.Validated();
+            }
+
+            return Task.FromResult<object>(null);
+        }
+
+        public override Task TokenEndpoint(OAuthTokenEndpointContext context)
+        {
+            foreach (KeyValuePair<string, string> property in context.Properties.Dictionary)
+            {
+                context.AdditionalResponseParameters.Add(property.Key, property.Value);
+            }
+
+            return Task.FromResult<object>(null);
         }
 
         public override Task ValidateClientRedirectUri(OAuthValidateClientRedirectUriContext context)

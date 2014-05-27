@@ -1,5 +1,6 @@
 ﻿import ko = require('knockout');
 export import router = require("plugins/router");
+import security = require('../models/security');
 import toastr = require('toastr');
 import util = require('../util');
 import $ = require('jquery');
@@ -18,15 +19,23 @@ export function activate() {
     navigator.id.watch({
         loggedInUser: loadUser,
         onlogin: assertion => {
-            $.post('/api/Persona/login', { assertion: assertion }).then(result => result, util.failAsJson).fail(err => {
-                toastr.error(err.reason, "Login Failure");
+            $.post('/Token', { grant_type: 'persona', assertion: assertion }).then(result => result, util.failAsJson).fail(err => {
+                toastr.error(err.error_description || err.error || "Unknown error occurred", "Login Failure");
                 navigator.id.logout(); // avoid loops
-            }).then(result => user(result));
+            }).then(result => {
+                if (result.access_token) {
+                    security.setAccessToken(result.access_token, false);
+                }
+                user(result);
+            });
         },
         onlogout: () => {
             $.post('/api/Persona/logout').then(result => result, util.failAsJson).fail(err => {
                 toastr.error(err.message || "An unknown error occured.", "Logout Failure");
-            }).always(() => user(null));
+            }).always(() => {
+                security.clearAccessToken();
+                user(null);
+            });
         },
     });
 
