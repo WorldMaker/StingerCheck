@@ -36,7 +36,11 @@ namespace StingerCheck.Services
         public async Task<IEnumerable<JObject>> GetFreshNowPlaying()
         {
             var db = connection.GetDatabase();
-            var uri = new Uri(TomatoBaseUri, string.Concat("lists/movies/in_theaters.json?page_limit=50&country=us&apikey=", ConfigurationManager.AppSettings["TomatoApiKey"]));
+            var uris = new Stack<Uri>();
+            uris.Push(null);
+            uris.Push(new Uri(TomatoBaseUri, string.Concat("lists/movies/in_theaters.json?page_limit=50&country=us&apikey=", ConfigurationManager.AppSettings["TomatoApiKey"])));
+            uris.Push(new Uri(TomatoBaseUri, string.Concat("lists/movies/opening.json?page_limit=50&country=us&apikey=", ConfigurationManager.AppSettings["TomatoApiKey"])));
+            var uri = uris.Pop();
             var jmovies = new List<JObject>();
             using (var client = new HttpClient())
             {
@@ -52,12 +56,13 @@ namespace StingerCheck.Services
                     var next = (string)jmovie.SelectToken("links.next");
                     if (next != null)
                     {
-                        uri = new Uri(string.Concat(next, "&apikey=", ConfigurationManager.AppSettings["TomatoApiKey"]));
+                        uris.Push(new Uri(string.Concat(next, "&apikey=", ConfigurationManager.AppSettings["TomatoApiKey"])));
                     }
+                    uri = uris.Pop();
                 }
             }
 
-            await db.KeyExpireAsync(TomatoMoviesKey, TimeSpan.FromDays(3));
+            await db.KeyExpireAsync(TomatoMoviesKey, TimeSpan.FromHours(3));
 
             return jmovies;
         }
