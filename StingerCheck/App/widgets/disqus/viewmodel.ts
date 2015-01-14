@@ -9,9 +9,9 @@
 
     compositionComplete() {
         /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-        var disqus_shortname = 'stingercheck'; // required: replace example with your forum shortname
-        var disqus_identifier = this.identifier;
-        var disqus_title = this.title;
+        var disqus_shortname = (<any>window).disqus_shortname = 'stingercheck'; // required: replace example with your forum shortname
+        var disqus_identifier = (<any>window).disqus_identifier = this.identifier;
+        var disqus_title = (<any>window).disqus_title = this.title;
 
             /* * * DON'T EDIT BELOW THIS LINE * * */
             (function () {
