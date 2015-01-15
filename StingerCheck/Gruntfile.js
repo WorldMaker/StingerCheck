@@ -1,16 +1,6 @@
 ﻿module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        typescript: {
-            base: {
-                src: ['**/*.ts'],
-                options: {
-                    module: 'amd', //or commonjs
-                    target: 'es5', //or es3
-                    sourceMap: true,
-                }
-            }
-        },
         durandal: {
             dist: {
                 src: [
@@ -58,8 +48,7 @@
         }
     });
 
-    grunt.loadNpmTasks('grunt-typescript');
     grunt.loadNpmTasks('grunt-durandal');
 
-    grunt.registerTask('default', ['typescript', 'durandal']);
+    grunt.registerTask('default', ['durandal']);
 }
